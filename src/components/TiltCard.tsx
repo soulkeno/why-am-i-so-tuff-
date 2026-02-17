@@ -1,4 +1,5 @@
 import { useRef, useState, type ReactNode, type MouseEvent } from "react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface TiltCardProps {
@@ -24,24 +25,24 @@ const TiltCard = ({ children, className, onClick }: TiltCardProps) => {
     const rotateX = ((y - centerY) / centerY) * -6;
     const rotateY = ((x - centerX) / centerX) * 6;
 
-    setTransform(`perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`);
+    setTransform(`perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`);
     setGlowPos({ x: (x / rect.width) * 100, y: (y / rect.height) * 100 });
   };
 
   const handleMouseEnter = () => setIsHovering(true);
-
   const handleMouseLeave = () => {
     setTransform("perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)");
     setIsHovering(false);
   };
 
   return (
-    <div
+    <motion.div
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
+      whileTap={onClick ? { scale: 0.98 } : undefined}
       className={cn(
         "relative overflow-hidden rounded-lg border bg-card transition-all duration-300 ease-out",
         isHovering ? "border-primary/50" : "border-border/60",
@@ -51,8 +52,8 @@ const TiltCard = ({ children, className, onClick }: TiltCardProps) => {
       style={{
         transform,
         boxShadow: isHovering
-          ? `0 0 15px -3px hsl(265 90% 60% / 0.2), inset 0 0 15px -8px hsl(265 90% 60% / 0.05)`
-          : "none",
+          ? `0 0 20px -3px hsl(265 90% 60% / 0.15), inset 0 0 20px -8px hsl(265 90% 60% / 0.03)`
+          : "0 0 0 0 transparent",
       }}
     >
       {/* Cursor glow overlay */}
@@ -63,8 +64,16 @@ const TiltCard = ({ children, className, onClick }: TiltCardProps) => {
           background: `radial-gradient(350px circle at ${glowPos.x}% ${glowPos.y}%, hsl(265 90% 60% / 0.08), transparent 60%)`,
         }}
       />
+      {/* Shimmer line on hover */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[1px] transition-opacity duration-500"
+        style={{
+          opacity: isHovering ? 1 : 0,
+          background: `linear-gradient(90deg, transparent, hsl(265 90% 60% / 0.3) ${glowPos.x}%, transparent)`,
+        }}
+      />
       <div className="relative z-20">{children}</div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -38,6 +38,16 @@ const steps = [
   { step: 4, text: "Paste the code below and press Enter" },
 ];
 
+const container = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+};
+
 const MCTiers = () => {
   const [copied, setCopied] = useState(false);
 
@@ -50,43 +60,43 @@ const MCTiers = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="flex flex-col items-start px-6 pb-10 pt-28">
+      <motion.section
+        className="flex flex-col items-start px-6 pb-10 pt-28"
+        variants={container}
+        initial="hidden"
+        animate="show"
+      >
         <div className="mx-auto w-full max-w-3xl">
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
+            variants={item}
             className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 text-primary"
           >
             <Crosshair className="h-5 w-5" />
           </motion.div>
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.05 }}
+            variants={item}
             className="text-3xl font-black tracking-tight sm:text-4xl"
           >
             MCTiers <span className="text-gradient-purple">Queue Sniper</span>
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            variants={item}
             className="mt-3 max-w-lg text-sm text-muted-foreground"
           >
             Automatically clicks "Join Queue" the instant it appears — giving you the fastest entry into the waitlist.
           </motion.p>
         </div>
-      </section>
+      </motion.section>
 
-      <div className="mx-auto max-w-3xl space-y-4 px-6 pb-24">
+      <motion.div
+        className="mx-auto max-w-3xl space-y-4 px-6 pb-24"
+        variants={container}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+      >
         {/* What it does */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-        >
+        <motion.div variants={item}>
           <TiltCard className="p-5">
             <h2 className="mb-2 text-sm font-semibold text-foreground">What does it do?</h2>
             <p className="text-xs leading-relaxed text-muted-foreground">
@@ -98,47 +108,54 @@ const MCTiers = () => {
         </motion.div>
 
         {/* Setup Steps */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: 0.05 }}
-        >
+        <motion.div variants={item}>
           <TiltCard className="p-5">
             <h2 className="mb-3 text-sm font-semibold text-foreground">Setup</h2>
             <div className="space-y-2.5">
-              {steps.map((s) => (
-                <div key={s.step} className="flex items-start gap-3">
+              {steps.map((s, i) => (
+                <motion.div
+                  key={s.step}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: i * 0.06 }}
+                  className="flex items-start gap-3"
+                >
                   <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-primary/10 text-[10px] font-bold text-primary">
                     {s.step}
                   </span>
                   <p className="text-xs text-muted-foreground">{s.text}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </TiltCard>
         </motion.div>
 
         {/* Code Block */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-        >
+        <motion.div variants={item}>
           <TiltCard className="p-5">
             <div className="mb-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Terminal className="h-3.5 w-3.5 text-primary" />
                 <h2 className="text-sm font-semibold text-foreground">Code</h2>
               </div>
-              <button
+              <motion.button
                 onClick={handleCopy}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
                 className="inline-flex h-7 items-center gap-1.5 rounded border border-border bg-secondary px-2.5 text-[10px] font-medium text-secondary-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
-                {copied ? <Check className="h-3 w-3 text-green-400" /> : <Copy className="h-3 w-3" />}
+                <motion.span
+                  key={copied ? "check" : "copy"}
+                  initial={{ scale: 0, rotate: -90 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 20 }}
+                >
+                  {copied ? <Check className="h-3 w-3 text-green-400" /> : <Copy className="h-3 w-3" />}
+                </motion.span>
                 {copied ? "Copied" : "Copy"}
-              </button>
+              </motion.button>
             </div>
             <div className="overflow-x-auto rounded border border-border bg-background/50 p-4">
               <pre className="text-[10px] leading-relaxed text-muted-foreground" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
@@ -147,7 +164,7 @@ const MCTiers = () => {
             </div>
           </TiltCard>
         </motion.div>
-      </div>
+      </motion.div>
     </Layout>
   );
 };
