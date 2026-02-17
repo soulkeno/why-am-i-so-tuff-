@@ -4,6 +4,30 @@ import { Crosshair, Video } from "lucide-react";
 import Layout from "@/components/Layout";
 import TiltCard from "@/components/TiltCard";
 
+const CODE_PREVIEW = `(() => {
+  const target = "join queue";
+  let scheduled = false;
+  const find = () =>
+    [...document.querySelectorAll(
+      "button,[role='button']"
+    )].filter(el =>
+      el.textContent?.toLowerCase()
+        .includes(target)
+    );
+  const run = () => {
+    scheduled = false;
+    const buttons = find();
+    if (!buttons.length) return;
+    buttons.forEach(btn => btn.click());
+  };
+  const observer =
+    new MutationObserver(schedule);
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+})();`;
+
 const tools = [
   {
     icon: Crosshair,
@@ -25,44 +49,79 @@ const Index = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="flex min-h-[75vh] flex-col items-start justify-center px-6">
-        <div className="mx-auto w-full max-w-6xl">
+      <section className="flex min-h-[75vh] items-center px-6">
+        <div className="mx-auto flex w-full max-w-6xl items-center gap-12">
+          {/* Left - Text */}
+          <div className="flex-1">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="mb-6 inline-block rounded-md border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary"
+            >
+              Tools
+            </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.05 }}
+              className="text-4xl font-black leading-tight tracking-tight sm:text-6xl"
+            >
+              Your favorite{" "}
+              <span className="text-gradient-purple">tools</span>
+              <br />
+              in one place
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground"
+            >
+              A collection of free, lightweight utilities designed with speed and simplicity in mind.
+            </motion.p>
+            <motion.a
+              href="#tools"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.25 }}
+              className="mt-8 inline-flex h-9 items-center gap-2 rounded-md border border-border bg-secondary px-5 text-xs font-medium text-foreground transition-colors hover:bg-muted"
+            >
+              ▶ Browse Tools
+            </motion.a>
+          </div>
+
+          {/* Right - Code Preview */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-6 inline-block rounded-md border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary"
+            initial={{ opacity: 0, x: 40, rotate: 4 }}
+            animate={{ opacity: 1, x: 0, rotate: 3 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="hidden flex-shrink-0 lg:block"
           >
-            Tools
+            <div
+              className="w-[380px] overflow-hidden rounded-xl border border-border/60 bg-card shadow-2xl"
+              style={{
+                transform: "rotate(3deg)",
+                boxShadow: "0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 30px -10px hsl(265 90% 60% / 0.1)",
+              }}
+            >
+              {/* Window dots */}
+              <div className="flex items-center gap-1.5 border-b border-border/40 px-4 py-2.5">
+                <div className="h-2.5 w-2.5 rounded-full bg-muted-foreground/20" />
+                <div className="h-2.5 w-2.5 rounded-full bg-muted-foreground/20" />
+                <div className="h-2.5 w-2.5 rounded-full bg-muted-foreground/20" />
+                <span className="ml-2 text-[9px] text-muted-foreground/50">sniper.js</span>
+              </div>
+              <div className="p-4">
+                <pre
+                  className="text-[10px] leading-[1.6] text-muted-foreground/80"
+                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                >
+                  <code>{CODE_PREVIEW}</code>
+                </pre>
+              </div>
+            </div>
           </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.05 }}
-            className="text-4xl font-black leading-tight tracking-tight sm:text-6xl"
-          >
-            Your favorite{" "}
-            <span className="text-gradient-purple">tools</span>
-            <br />
-            in one place
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground"
-          >
-            A collection of free, lightweight utilities designed with speed and simplicity in mind.
-          </motion.p>
-          <motion.a
-            href="#tools"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            className="mt-8 inline-flex h-9 items-center gap-2 rounded-md border border-border bg-secondary px-5 text-xs font-medium text-foreground transition-colors hover:bg-muted"
-          >
-            ▶ Browse Tools
-          </motion.a>
         </div>
       </section>
 
