@@ -146,7 +146,7 @@ const Index = () => {
             >
               <TiltCard
                 onClick={() => navigate(tool.path)}
-                className="group p-5"
+                className="group h-full p-5"
               >
                 <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary">
                   <tool.icon className="h-4 w-4" />
