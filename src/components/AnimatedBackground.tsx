@@ -12,99 +12,90 @@ const AnimatedBackground = () => {
     let animationId: number;
     let mouseX = -1000;
     let mouseY = -1000;
-    let particles: {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      size: number;
-      alpha: number;
-      baseAlpha: number;
-    }[] = [];
+    const gridSize = 40;
+    const radius = 200;
 
     const resize = () => {
       canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      canvas.height = document.documentElement.scrollHeight;
     };
     resize();
     window.addEventListener("resize", resize);
 
     const handleMouse = (e: MouseEvent) => {
       mouseX = e.clientX;
-      mouseY = e.clientY;
+      mouseY = e.clientY + window.scrollY;
+    };
+    const handleScroll = () => {
+      // Update mouse Y relative to scroll
     };
     window.addEventListener("mousemove", handleMouse);
-
-    const count = Math.min(100, Math.floor(window.innerWidth / 16));
-    for (let i = 0; i < count; i++) {
-      const baseAlpha = Math.random() * 0.25 + 0.03;
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.25,
-        size: Math.random() * 1.5 + 0.5,
-        alpha: baseAlpha,
-        baseAlpha,
-      });
-    }
+    window.addEventListener("scroll", handleScroll);
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      particles.forEach((p, i) => {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0) p.x = canvas.width;
-        if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height;
-        if (p.y > canvas.height) p.y = 0;
+      const scrollY = window.scrollY;
+      const adjustedMouseY = mouseY;
 
-        // Mouse interaction — particles glow brighter near cursor
-        const dx = p.x - mouseX;
-        const dy = p.y - mouseY;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const influence = Math.max(0, 1 - dist / 200);
-        p.alpha = p.baseAlpha + influence * 0.4;
+      const cols = Math.ceil(canvas.width / gridSize) + 1;
+      const rows = Math.ceil(canvas.height / gridSize) + 1;
 
-        // Slight push away from cursor
-        if (dist < 150 && dist > 0) {
-          p.vx += (dx / dist) * 0.02;
-          p.vy += (dy / dist) * 0.02;
-        }
-
-        // Dampen velocity
-        p.vx *= 0.999;
-        p.vy *= 0.999;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size + influence * 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(139, 92, 246, ${p.alpha})`;
-        ctx.fill();
-
-        // Draw connections
-        for (let j = i + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          const cdx = p.x - p2.x;
-          const cdy = p.y - p2.y;
-          const cdist = Math.sqrt(cdx * cdx + cdy * cdy);
-          if (cdist < 120) {
-            const lineAlpha = 0.06 * (1 - cdist / 120);
-            // Lines near cursor glow brighter
-            const midX = (p.x + p2.x) / 2;
-            const midY = (p.y + p2.y) / 2;
-            const mDist = Math.sqrt((midX - mouseX) ** 2 + (midY - mouseY) ** 2);
-            const mInfluence = Math.max(0, 1 - mDist / 200);
-
+      // Draw grid lines that reveal near cursor
+      for (let i = 0; i <= cols; i++) {
+        const x = i * gridSize;
+        for (let j = 0; j < rows; j++) {
+          const y1 = j * gridSize;
+          const y2 = y1 + gridSize;
+          const midY = (y1 + y2) / 2;
+          const dist = Math.sqrt((x - mouseX) ** 2 + (midY - adjustedMouseY) ** 2);
+          if (dist < radius) {
+            const alpha = (1 - dist / radius) * 0.2;
             ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(139, 92, 246, ${lineAlpha + mInfluence * 0.12})`;
-            ctx.lineWidth = 0.5 + mInfluence * 0.5;
+            ctx.moveTo(x, y1);
+            ctx.lineTo(x, y2);
+            ctx.strokeStyle = `rgba(139, 92, 246, ${alpha})`;
+            ctx.lineWidth = 0.5;
             ctx.stroke();
           }
         }
-      });
+      }
+
+      for (let j = 0; j <= rows; j++) {
+        const y = j * gridSize;
+        for (let i = 0; i < cols; i++) {
+          const x1 = i * gridSize;
+          const x2 = x1 + gridSize;
+          const midX = (x1 + x2) / 2;
+          const dist = Math.sqrt((midX - mouseX) ** 2 + (y - adjustedMouseY) ** 2);
+          if (dist < radius) {
+            const alpha = (1 - dist / radius) * 0.2;
+            ctx.beginPath();
+            ctx.moveTo(x1, y);
+            ctx.lineTo(x2, y);
+            ctx.strokeStyle = `rgba(139, 92, 246, ${alpha})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw brighter dots at intersections near cursor
+      for (let i = 0; i <= cols; i++) {
+        for (let j = 0; j <= rows; j++) {
+          const x = i * gridSize;
+          const y = j * gridSize;
+          const dist = Math.sqrt((x - mouseX) ** 2 + (y - adjustedMouseY) ** 2);
+          if (dist < radius) {
+            const alpha = (1 - dist / radius) * 0.5;
+            const size = (1 - dist / radius) * 1.8;
+            ctx.beginPath();
+            ctx.arc(x, y, size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(139, 92, 246, ${alpha})`;
+            ctx.fill();
+          }
+        }
+      }
 
       animationId = requestAnimationFrame(animate);
     };
@@ -114,6 +105,7 @@ const AnimatedBackground = () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", handleMouse);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -129,16 +121,8 @@ const AnimatedBackground = () => {
             filter: "blur(80px)",
           }}
         />
-        <div
-          className="absolute -top-[10%] left-[20%] h-[400px] w-[600px]"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, hsl(220 90% 50% / 0.05) 0%, transparent 70%)",
-            filter: "blur(60px)",
-          }}
-        />
       </div>
-      {/* Particle canvas */}
+      {/* Grid canvas */}
       <canvas
         ref={canvasRef}
         className="pointer-events-none fixed inset-0 z-[1]"
