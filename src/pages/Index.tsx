@@ -89,7 +89,7 @@ const Index = () => {
               variants={item}
               className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground"
             >
-              A collection of free, lightweight utilities designed with speed and simplicity in mind.
+              yes me keno made ts cuz im so tuff :3
             </motion.p>
             <motion.div variants={item}>
               <motion.a
