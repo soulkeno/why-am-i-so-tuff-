@@ -62,7 +62,7 @@ const Index = () => {
     <Layout>
       {/* Hero */}
       <section className="flex min-h-[75vh] items-center px-6">
-        <div className="mx-auto flex w-full max-w-6xl items-center gap-12">
+        <div className="mx-auto flex w-full max-w-6xl items-center gap-12 relative">
           {/* Left - Text */}
           <motion.div
             className="flex-1"
@@ -72,7 +72,7 @@ const Index = () => {
           >
             <motion.div
               variants={item}
-              className="mb-6 inline-block rounded-md border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary"
+              className="mb-6 inline-block corner-brackets rounded-md border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary"
             >
               Tools
             </motion.div>
@@ -114,7 +114,7 @@ const Index = () => {
             <motion.div
               animate={{ y: [0, -8, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="w-[380px] overflow-hidden rounded-xl border border-border/60 bg-card shadow-2xl"
+              className="w-[380px] overflow-hidden rounded-xl border border-border/60 bg-card shadow-2xl corner-brackets"
               style={{
                 transform: "rotate(3deg)",
                 boxShadow: "0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 30px -10px hsl(265 90% 60% / 0.1)",
@@ -139,6 +139,11 @@ const Index = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Divider */}
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="glow-divider mb-12" />
+      </div>
 
       {/* Tools Grid */}
       <section id="tools" className="mx-auto max-w-6xl px-6 pb-32">
