@@ -83,7 +83,7 @@ const MCTiers = () => {
             variants={item}
             className="mt-3 max-w-lg text-sm text-muted-foreground"
           >
-            Automatically clicks "Join Queue" the instant it appears — giving you the fastest entry into the waitlist.
+            Automatically clicks "Join Queue" the instant it shows up, so you get into the waitlist as fast as possible.
           </motion.p>
         </div>
       </motion.section>
