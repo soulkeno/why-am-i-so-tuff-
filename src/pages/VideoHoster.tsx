@@ -56,8 +56,8 @@ const VideoHoster = () => {
           <TiltCard className="p-5">
             <h2 className="mb-2 text-sm font-semibold text-foreground">What is it?</h2>
             <p className="text-xs leading-relaxed text-muted-foreground">
-              Video Hoster lets you upload and host videos completely for free. Share them in Discord,
-              on your website, or anywhere else with just a link — no more "file too large" errors.
+              Video Hoster lets you upload and host videos for free. Share them in Discord,
+              on your website, or wherever you want with just a link. No more "file too large" errors.
             </p>
           </TiltCard>
         </motion.div>
@@ -69,7 +69,7 @@ const VideoHoster = () => {
               {[
                 { step: 1, text: "Upload your video to the platform" },
                 { step: 2, text: "Get a shareable link instantly" },
-                { step: 3, text: "Paste the link in Discord or anywhere — it embeds automatically" },
+                { step: 3, text: "Paste the link in Discord or wherever you want, it embeds automatically" },
               ].map((s, i) => (
                 <motion.div
                   key={s.step}
