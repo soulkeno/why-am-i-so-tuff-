@@ -16,7 +16,6 @@ const item = {
 const VideoHoster = () => {
   return (
     <Layout>
-      {/* Hero */}
       <motion.section
         className="flex flex-col items-start px-6 pb-10 pt-28"
         variants={container}
@@ -34,7 +33,7 @@ const VideoHoster = () => {
             variants={item}
             className="text-3xl font-black tracking-tight sm:text-4xl"
           >
-            Video <span className="text-gradient-purple">Hoster</span>
+            Video <span className="text-gradient-blue">Hoster</span>
           </motion.h1>
           <motion.p
             variants={item}

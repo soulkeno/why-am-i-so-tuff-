@@ -7,6 +7,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import MCTiers from "./pages/MCTiers";
 import VideoHoster from "./pages/VideoHoster";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
 
@@ -26,6 +28,8 @@ const App = () => {
             <Route path="/" element={<Index />} />
             <Route path="/mctiers" element={<MCTiers />} />
             <Route path="/video-hoster" element={<VideoHoster />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

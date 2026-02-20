@@ -27,7 +27,7 @@ const CODE = `(() => {
   observer.observe(document.body, { childList: true, subtree: true });
   document.addEventListener("visibilitychange", schedule);
   window.addEventListener("focus", schedule);
-  console.log("successfully injected keno's queue sniper >_<");
+  console.log("successfully injected queue sniper");
   run();
 })();`;
 
@@ -59,7 +59,6 @@ const MCTiers = () => {
 
   return (
     <Layout>
-      {/* Hero */}
       <motion.section
         className="flex flex-col items-start px-6 pb-10 pt-28"
         variants={container}
@@ -77,13 +76,13 @@ const MCTiers = () => {
             variants={item}
             className="text-3xl font-black tracking-tight sm:text-4xl"
           >
-            MCTiers <span className="text-gradient-purple">Queue Sniper</span>
+            MCTiers <span className="text-gradient-blue">Queue Sniper</span>
           </motion.h1>
           <motion.p
             variants={item}
             className="mt-3 max-w-lg text-sm text-muted-foreground"
           >
-            Automatically clicks "Join Queue" the instant it shows up, so you get into the waitlist as fast as possible.
+            Automatically clicks "Join Queue" the instant it shows up so you get into the waitlist as fast as possible.
           </motion.p>
         </div>
       </motion.section>
@@ -95,19 +94,17 @@ const MCTiers = () => {
         whileInView="show"
         viewport={{ once: true }}
       >
-        {/* What it does */}
         <motion.div variants={item}>
           <TiltCard className="p-5">
             <h2 className="mb-2 text-sm font-semibold text-foreground">What does it do?</h2>
             <p className="text-xs leading-relaxed text-muted-foreground">
               This script watches for the "Join Queue" button on the MCTiers page and clicks it automatically
-              the moment it appears. It uses a MutationObserver to detect DOM changes in real-time, so you'll
+              the moment it appears. It uses a MutationObserver to detect DOM changes in real time, so you
               never miss your spot in the queue.
             </p>
           </TiltCard>
         </motion.div>
 
-        {/* Setup Steps */}
         <motion.div variants={item}>
           <TiltCard className="p-5">
             <h2 className="mb-3 text-sm font-semibold text-foreground">Setup</h2>
@@ -131,7 +128,6 @@ const MCTiers = () => {
           </TiltCard>
         </motion.div>
 
-        {/* Code Block */}
         <motion.div variants={item}>
           <TiltCard className="p-5">
             <div className="mb-3 flex items-center justify-between">

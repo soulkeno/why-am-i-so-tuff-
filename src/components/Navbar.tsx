@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Terminal } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Navbar = () => {
@@ -16,19 +17,14 @@ const Navbar = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="fixed top-0 left-0 right-0 z-50 border-b border-border/30 bg-background/60 backdrop-blur-xl"
+      className="fixed top-0 left-0 right-0 z-50 border-b border-border/30 bg-background/80 backdrop-blur-xl"
     >
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
-        <Link to="/" className="group text-base font-bold tracking-tight text-foreground transition-colors hover:text-primary">
-          <motion.span
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400, damping: 15 }}
-            className="inline-block"
-          >
-            keno<span className="text-gradient-purple">.lol</span>
-          </motion.span>
+        <Link to="/" className="flex items-center gap-2 text-base font-bold tracking-tight text-foreground transition-colors hover:text-primary">
+          <Terminal className="h-4 w-4 text-primary" />
+          <span>Astrality</span>
         </Link>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-6">
           {links.map((link, i) => (
             <motion.div
               key={link.to}
@@ -54,6 +50,20 @@ const Navbar = () => {
               </Link>
             </motion.div>
           ))}
+          <div className="flex items-center gap-3 ml-4 border-l border-border/40 pl-4">
+            <Link
+              to="/login"
+              className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className="text-xs font-medium text-foreground bg-primary/10 border border-primary/30 rounded-md px-3 py-1.5 transition-colors hover:bg-primary/20"
+            >
+              Sign Up
+            </Link>
+          </div>
         </div>
       </div>
     </motion.nav>

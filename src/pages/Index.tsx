@@ -4,50 +4,24 @@ import { Crosshair, Video, ArrowRight } from "lucide-react";
 import Layout from "@/components/Layout";
 import TiltCard from "@/components/TiltCard";
 
-const CODE_PREVIEW = `(() => {
-  const target = "join queue";
-  let scheduled = false;
-  const find = () =>
-    [...document.querySelectorAll(
-      "button,[role='button']"
-    )].filter(el =>
-      el.textContent?.toLowerCase()
-        .includes(target)
-    );
-  const run = () => {
-    scheduled = false;
-    const buttons = find();
-    if (!buttons.length) return;
-    buttons.forEach(btn => btn.click());
-  };
-  const observer =
-    new MutationObserver(schedule);
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
-})();`;
-
 const tools = [
   {
     icon: Crosshair,
     title: "MCTiers Sniper",
-    description: 'Clicks "Join Queue" as fast as it\'ll go for you to join the waitlist queue.',
+    description: 'Clicks "Join Queue" as fast as it can so you get into the waitlist first.',
     path: "/mctiers",
   },
   {
     icon: Video,
     title: "Video Hoster",
-    description: "Host videos for FREE and send them in Discord with just a link, avoiding the file too large error.",
+    description: "Host videos for free and send them in Discord with just a link. No file size limits.",
     path: "/video-hoster",
   },
 ];
 
 const container = {
   hidden: {},
-  show: {
-    transition: { staggerChildren: 0.1 },
-  },
+  show: { transition: { staggerChildren: 0.1 } },
 };
 
 const item = {
@@ -62,34 +36,32 @@ const Index = () => {
     <Layout>
       {/* Hero */}
       <section className="flex min-h-[75vh] items-center px-6">
-        <div className="mx-auto flex w-full max-w-6xl items-center gap-12 relative">
-          {/* Left - Text */}
+        <div className="mx-auto w-full max-w-6xl">
           <motion.div
-            className="flex-1"
             variants={container}
             initial="hidden"
             animate="show"
           >
             <motion.div
               variants={item}
-              className="mb-6 inline-block corner-brackets rounded-md border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary"
+              className="mb-5 inline-block rounded border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary"
             >
-              Tools
+              Update
             </motion.div>
             <motion.h1
               variants={item}
               className="text-4xl font-black leading-tight tracking-tight sm:text-6xl"
             >
               Your favorite{" "}
-              <span className="text-gradient-purple">tools</span>
+              <span className="text-gradient-blue">tools</span>
               <br />
               in one place
             </motion.h1>
             <motion.p
               variants={item}
-              className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground"
+              className="mt-5 max-w-lg text-sm leading-relaxed text-muted-foreground"
             >
-              yes me keno made ts cuz im so tuff :3
+              A collection of useful tools built to make your life easier. Simple, fast, and free.
             </motion.p>
             <motion.div variants={item}>
               <motion.a
@@ -101,40 +73,6 @@ const Index = () => {
               >
                 ▶ Browse Tools
               </motion.a>
-            </motion.div>
-          </motion.div>
-
-          {/* Right - Code Preview */}
-          <motion.div
-            initial={{ opacity: 0, x: 60, rotate: 6 }}
-            animate={{ opacity: 1, x: 0, rotate: 3 }}
-            transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden flex-shrink-0 lg:block"
-          >
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="w-[380px] overflow-hidden rounded-xl border border-border/60 bg-card shadow-2xl corner-brackets"
-              style={{
-                transform: "rotate(3deg)",
-                boxShadow: "0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 30px -10px hsl(265 90% 60% / 0.1)",
-              }}
-            >
-              {/* Window dots */}
-              <div className="flex items-center gap-1.5 border-b border-border/40 px-4 py-2.5">
-                <div className="h-2.5 w-2.5 rounded-full bg-muted-foreground/20" />
-                <div className="h-2.5 w-2.5 rounded-full bg-muted-foreground/20" />
-                <div className="h-2.5 w-2.5 rounded-full bg-muted-foreground/20" />
-                <span className="ml-2 text-[9px] text-muted-foreground/50">sniper.js</span>
-              </div>
-              <div className="p-4">
-                <pre
-                  className="text-[10px] leading-[1.6] text-muted-foreground/80"
-                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
-                >
-                  <code>{CODE_PREVIEW}</code>
-                </pre>
-              </div>
             </motion.div>
           </motion.div>
         </div>
@@ -169,7 +107,7 @@ const Index = () => {
                 onClick={() => navigate(tool.path)}
                 className="group h-full p-5"
               >
-                <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary transition-colors duration-300 group-hover:bg-primary/20">
+                <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary">
                   <tool.icon className="h-4 w-4" />
                 </div>
                 <h3 className="mb-1.5 flex items-center gap-2 text-sm font-semibold text-foreground">
