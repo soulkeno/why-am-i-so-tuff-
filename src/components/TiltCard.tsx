@@ -22,10 +22,10 @@ const TiltCard = ({ children, className, onClick }: TiltCardProps) => {
     const y = e.clientY - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -6;
-    const rotateY = ((x - centerX) / centerX) * 6;
+    const rotateX = ((y - centerY) / centerY) * -4;
+    const rotateY = ((x - centerX) / centerX) * 4;
 
-    setTransform(`perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`);
+    setTransform(`perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`);
     setGlowPos({ x: (x / rect.width) * 100, y: (y / rect.height) * 100 });
   };
 
@@ -45,31 +45,18 @@ const TiltCard = ({ children, className, onClick }: TiltCardProps) => {
       whileTap={onClick ? { scale: 0.98 } : undefined}
       className={cn(
         "relative overflow-hidden rounded-lg border bg-card transition-all duration-300 ease-out",
-        isHovering ? "border-primary/50" : "border-border/60",
+        isHovering ? "border-primary/30" : "border-border/60",
         onClick && "cursor-pointer",
         className
       )}
-      style={{
-        transform,
-        boxShadow: isHovering
-          ? `0 0 20px -3px hsl(265 90% 60% / 0.15), inset 0 0 20px -8px hsl(265 90% 60% / 0.03)`
-          : "0 0 0 0 transparent",
-      }}
+      style={{ transform }}
     >
-      {/* Cursor glow overlay */}
+      {/* Subtle cursor glow */}
       <div
         className="pointer-events-none absolute inset-0 z-10 transition-opacity duration-300"
         style={{
           opacity: isHovering ? 1 : 0,
-          background: `radial-gradient(350px circle at ${glowPos.x}% ${glowPos.y}%, hsl(265 90% 60% / 0.08), transparent 60%)`,
-        }}
-      />
-      {/* Shimmer line on hover */}
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[1px] transition-opacity duration-500"
-        style={{
-          opacity: isHovering ? 1 : 0,
-          background: `linear-gradient(90deg, transparent, hsl(265 90% 60% / 0.3) ${glowPos.x}%, transparent)`,
+          background: `radial-gradient(300px circle at ${glowPos.x}% ${glowPos.y}%, hsl(225 80% 55% / 0.05), transparent 60%)`,
         }}
       />
       <div className="relative z-20">{children}</div>
