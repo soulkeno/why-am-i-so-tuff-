@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import MCTiers from "./pages/MCTiers";
 import VideoHoster from "./pages/VideoHoster";
@@ -19,21 +20,23 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        {!splashDone && <SplashScreen onComplete={() => setSplashDone(true)} />}
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/mctiers" element={<MCTiers />} />
-            <Route path="/video-hoster" element={<VideoHoster />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          {!splashDone && <SplashScreen onComplete={() => setSplashDone(true)} />}
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/mctiers" element={<MCTiers />} />
+              <Route path="/video-hoster" element={<VideoHoster />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 };

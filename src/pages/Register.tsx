@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Terminal, User, Mail, Lock, Check } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const steps = [
   {
@@ -13,8 +15,8 @@ const steps = [
   {
     id: 2,
     icon: Mail,
-    title: "Verify your email",
-    description: "We'll use this to verify your account",
+    title: "Enter your email",
+    description: "We'll send a confirmation link",
   },
   {
     id: 3,
@@ -29,9 +31,48 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const goNext = () => {
+    if (currentStep === 1 && !username.trim()) {
+      toast({ title: "Username required", variant: "destructive" });
+      return;
+    }
+    if (currentStep === 2 && !email.trim()) {
+      toast({ title: "Email required", variant: "destructive" });
+      return;
+    }
     if (currentStep < 3) setCurrentStep(currentStep + 1);
+  };
+
+  const handleRegister = async () => {
+    if (!password || password.length < 6) {
+      toast({ title: "Password must be at least 6 characters", variant: "destructive" });
+      return;
+    }
+
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { username },
+        emailRedirectTo: window.location.origin,
+      },
+    });
+
+    if (error) {
+      toast({ title: "Registration failed", description: error.message, variant: "destructive" });
+    } else {
+      toast({
+        title: "Check your email",
+        description: "We sent you a confirmation link. Please verify your email to log in.",
+      });
+      navigate("/login");
+    }
+    setLoading(false);
   };
 
   const renderStepContent = () => {
@@ -92,10 +133,11 @@ const Register = () => {
               />
             </div>
             <button
-              type="submit"
-              className="w-full rounded-md bg-muted border border-border py-2.5 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
+              onClick={handleRegister}
+              disabled={loading}
+              className="w-full rounded-md bg-muted border border-border py-2.5 text-sm font-medium text-foreground hover:bg-secondary transition-colors disabled:opacity-50"
             >
-              Create Account
+              {loading ? "Creating account..." : "Create Account"}
             </button>
           </div>
         );
@@ -115,7 +157,9 @@ const Register = () => {
           {steps.map((step) => (
             <button
               key={step.id}
-              onClick={() => setCurrentStep(step.id)}
+              onClick={() => {
+                if (step.id < currentStep) setCurrentStep(step.id);
+              }}
               className={`w-full text-left rounded-md p-3 transition-colors ${
                 currentStep === step.id
                   ? "bg-card border border-border"

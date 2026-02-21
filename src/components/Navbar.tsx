@@ -1,10 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Terminal } from "lucide-react";
+import { Terminal, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
   const location = useLocation();
+  const { user, signOut } = useAuth();
 
   const links = [
     { to: "/", label: "Home" },
@@ -51,18 +53,30 @@ const Navbar = () => {
             </motion.div>
           ))}
           <div className="flex items-center gap-3 ml-4 border-l border-border/40 pl-4">
-            <Link
-              to="/login"
-              className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Login
-            </Link>
-            <Link
-              to="/register"
-              className="text-xs font-medium text-foreground bg-primary/10 border border-primary/30 rounded-md px-3 py-1.5 transition-colors hover:bg-primary/20"
-            >
-              Sign Up
-            </Link>
+            {user ? (
+              <button
+                onClick={signOut}
+                className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                Sign Out
+              </button>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="text-xs font-medium text-foreground bg-primary/10 border border-primary/30 rounded-md px-3 py-1.5 transition-colors hover:bg-primary/20"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
